@@ -16,7 +16,8 @@ class Poi(models.Model):
         (OTHER, 'other'),
     ]
 
-    def_name = models.CharField(max_length=256, verbose_name='POI name', unique=True)
+    rid = models.IntegerField(primary_key=True)
+    def_name = models.CharField(max_length=256, verbose_name='POI name') # TODO: make unique, once data are clean
     point = models.PointField(verbose_name='Location', geography=True)
     feature_type = models.CharField(max_length=64, choices=FEATURE_TYPE_CHOICES)
 
@@ -25,7 +26,7 @@ class Poi(models.Model):
 
     def __str__(self):
         """ The string that is used to identify an object in the interpreter """
-        return self.name
+        return self.def_name
 
 
 class TravelTime(models.Model):
@@ -41,4 +42,4 @@ class TravelTime(models.Model):
     objects = models.GeoManager()
 
     def __str__(self):
-        return "%s -> %s" % (self.origin.name, self.destination.name)
+        return "%s -> %s" % (self.origin.def_name, self.destination.def_name)

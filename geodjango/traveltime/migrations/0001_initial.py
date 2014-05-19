@@ -10,8 +10,8 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding model 'Poi'
         db.create_table(u'traveltime_poi', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('def_name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=256)),
+            ('rid', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
+            ('def_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
             ('point', self.gf('django.contrib.gis.db.models.fields.PointField')(geography=True)),
             ('feature_type', self.gf('django.db.models.fields.CharField')(max_length=64)),
         ))
@@ -40,10 +40,10 @@ class Migration(SchemaMigration):
     models = {
         u'traveltime.poi': {
             'Meta': {'object_name': 'Poi'},
-            'def_name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'}),
+            'def_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'feature_type': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'point': ('django.contrib.gis.db.models.fields.PointField', [], {'geography': 'True'})
+            'point': ('django.contrib.gis.db.models.fields.PointField', [], {'geography': 'True'}),
+            'rid': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'})
         },
         u'traveltime.traveltime': {
             'Meta': {'object_name': 'TravelTime'},
