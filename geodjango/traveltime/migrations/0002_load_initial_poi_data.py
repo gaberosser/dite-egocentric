@@ -13,7 +13,9 @@ class Migration(DataMigration):
         # and orm['appname.ModelName'] for models in other applications.
 
         from django.core.management import call_command
-        call_command("loaddata", "fixtures/initial_poi_data.json")
+        call_command("loaddata", "initial_poi_data.json")
+        call_command("loaddata", "initial_tt_data.json")
+
 
     def backwards(self, orm):
         "Write your backwards methods here."
