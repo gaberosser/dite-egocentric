@@ -1,0 +1,12 @@
+git
+python
+python-dev
+python-pip
+python-virtualenv
+screen
+gfortran
+gcc
+g++
+libopenblas-dev
+liblapack-dev
+libpq-dev

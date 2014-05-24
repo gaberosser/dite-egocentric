@@ -18,10 +18,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#_)o-b2ye6zklwxd6w&ayo%(ci2edm1s__*5c=i^d7rv+in!!p'
+if PRODUCTION:
+    SECRET_KEY = PRODUCTION_SECRET_KEY
+else:
+    SECRET_KEY = '#_)o-b2ye6zklwxd6w&ayo%(ci2edm1s__*5c=i^d7rv+in!!p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not PRODUCTION
 
 TEMPLATE_DEBUG = True
 
@@ -54,17 +57,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'geodjango.urls'
 
 WSGI_APPLICATION = 'geodjango.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'dite',
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
