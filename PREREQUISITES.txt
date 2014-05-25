@@ -13,6 +13,7 @@ libpq-dev
 binutils
 libproj-dev
 gdal-bin
+libev-dev
 
 # Amazon RDS: setting up PostGIS
 http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.PostgreSQL.CommonDBATasks.html#Appendix.PostgreSQL.CommonDBATasks.PostGIS
