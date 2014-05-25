@@ -28,7 +28,7 @@ DEBUG = not PRODUCTION
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
