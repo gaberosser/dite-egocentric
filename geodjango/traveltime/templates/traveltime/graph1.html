@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script type="text/javascript" src="{{ STATIC_URL }}d3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <title></title>
+</head>
+<body>
+<link href='{{ STATIC_URL }}primary.css' rel='stylesheet' type='text/css' />
+<div class=Layout2_header id="top_bar"> <h1>Hello World!</h1> </div>
+<div class=Layout2_1 id="left_bar">The variable passed to me is {{ myvar }}.</div>
+<div class=Layout2_2 id="right_bar"></div>
+
+
+<script>
+    var data = {{ data|safe }};
+    var textData = {{ textData|safe }};
+    var pois = {{ pois|safe }};
+
+    var width = 960,
+        height = 1160;
+
+    var svg = d3.select("#right_bar").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+//    var bodySelection = d3.select("#left_bar");
+//    var svgSelection = bodySelection.append("svg")
+//        .attr("width", 50)
+//        .attr("height", 50);
+//    var circleSelection = svgSelection.append("circle")
+//        .attr("cx", 25)
+//        .attr("cy", 25)
+//        .attr("r", 25)
+//        .style("fill", "purple");
+
+    var p = d3.select("body").selectAll("p")
+        .data(textData)
+        .enter()
+        .append("p")
+        .text(function(d) { return d; })
+        .style("font-size", "6pt")
+            .transition()
+            .style("font-size", "26pt");
+
+    var divSelection = d3.select("#left_bar");
+    var svgSelection = divSelection.append("svg")
+        .attr("width", 100)
+        .attr("height", 100);
+
+    svgSelection.selectAll("circle")
+        .data(data)
+        .enter().append("circle")
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; })
+        .attr("r", 5)
+            .transition()
+            .attr("r", 15);
+
+    var projection = d3.geo.mercator()
+            .translate([width/2, height/2])
+            .center([1.5, 51.5])
+            .scale([2000]);
+    var path = d3.geo.path().projection(projection);
+    d3.json("{{ STATIC_URL }}subunits.json", function(json) {
+//      if (error) return console.error(error);
+        var paths = svg.selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr("fill", "none")
+            .attr("stroke", "black");
+      console.log(paths);
+    });
+
+
+
+
+
+</script>
+</body>
+</html>

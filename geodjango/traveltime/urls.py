@@ -5,6 +5,7 @@ from traveltime import views
 urlpatterns = [
     # ex: /polls/
     url(r'^$', views.home, name='home'),
+    url(r'^graph1/$', views.d3_sandbox, name='graph1'),
     # # ex: /polls/5/
     # url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     # # ex: /polls/5/results/
