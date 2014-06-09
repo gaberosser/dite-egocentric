@@ -12,4 +12,5 @@ def get_destinations_travel_times(def_name='Salisbury'):
     cur = connection.cursor().cursor
     cur.execute(qry)
     res = cur.fetchall()
-    return [(x[0], str(x[1])) for x in res]
+    return res
+    # return [x[0] for x in res], [str(x[1]) for x in res]
