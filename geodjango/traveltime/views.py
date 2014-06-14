@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseNotFound
 from models import Poi, TravelTime
 from logic import get_destinations_travel_times
 import json
@@ -29,3 +30,12 @@ def d3_sandbox(request):
         'pois': json.dumps(new_json),
     }
     return render(request, 'traveltime/graph1.html', c)
+
+
+def d3_async_pois(request):
+
+    if request.GET:
+        html = "<html><body>GET object is %s</body></html>" % str(request.GET)
+        return HttpResponse(html)
+    else:
+        return HttpResponseNotFound("No GET")
