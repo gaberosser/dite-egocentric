@@ -56,3 +56,5 @@ docs/_build/
 # PyCharm stuff
 .idea/
 
+# Auto backups
+*~
