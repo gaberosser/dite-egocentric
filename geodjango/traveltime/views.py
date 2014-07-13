@@ -1,8 +1,23 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
+from rest_framework.renderers import JSONRenderer
 from models import Poi, TravelTime
 from logic import get_destinations_travel_times
 import json
+import datetime
+import random
+from django.views.decorators.csrf import csrf_exempt
+
+
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
 
 # Create your views here.
 def home(request):
@@ -30,6 +45,35 @@ def d3_sandbox(request):
         'pois': json.dumps(new_json),
     }
     return render(request, 'traveltime/graph1.html', c)
+
+
+def d3_sandbox2(request):
+    c = {
+        'myvar': 'foo',
+    }
+    # random spacetime data
+    n = 10
+    res = []
+    for i in range(n):
+        t = datetime.datetime.now()
+        res.append((t, random.random(), random.random()))
+
+    return render(request, 'traveltime/graph2.html', c)
+
+@csrf_exempt
+def create_data(request):
+    # create random spacetime data
+    if request.method == 'POST':
+        n = int(request.POST.get('n', '10'))
+    else:
+        n = 10
+
+    res = []
+    for i in range(n):
+        t = datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 30))
+        res.append((t.strftime("%Y-%m-%d %H:%M:%S.") + "%03d" % int(t.microsecond / 1000.), random.random(), random.random()))
+    # return JSONResponse(json.dumps(res))
+    return JSONResponse(res)
 
 
 def d3_async_pois(request):

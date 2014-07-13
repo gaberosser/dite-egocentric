@@ -1,0 +1,115 @@
+<html>
+<head>
+    <script type="text/javascript" src="{{ STATIC_URL }}d3.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <title>Dite egocentric</title>
+</head>
+<body>
+<link href='{{ STATIC_URL }}primary.css' rel='stylesheet' type='text/css' />
+<div class=grLayout_header id="top_bar"> <h1>Hello World!</h1> </div>
+<div class=grLayout_main id="main_box"></div>
+<div class=grLayout_footer id="footer_bar"></div>
+
+<script>
+    // date format
+    var format = d3.time.format("%Y-%m-%d %H:%M:S.%f");
+
+    // setup main plot
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([0.1, 10])
+        .on("zoom", zoomed);
+
+    function zoomed() {
+      container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+
+    var svg = d3.select("#main_box").append("svg")
+        .attr("class", "grLayout_svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .call(zoom)
+        .append("g"); // group - any transformations will be applied to all child elements
+
+    var rect = svg.append("rect")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .style("fill", "none")
+        .style("pointer-events", "all");
+
+    var bbox = rect.node().getBBox();
+
+    // add button
+    addButton = d3.select("#footer_bar")
+                    .append("input")
+                    .attr("type", "button")
+                    .attr("class", "button")
+                    .attr("id", "clickAdd")
+                    .attr("value", "Add");
+
+    removeButton = d3.select("#footer_bar")
+                    .append("input")
+                    .attr("type", "button")
+                    .attr("class", "button")
+                    .attr("id", "clickRemove")
+                    .attr("value", "Remove");
+
+
+    var container = svg.append("g");
+
+    // scale
+    var x = d3.scale.linear()
+            .range([10, bbox.width - 10])
+            .domain([0.0, 1.0]);
+
+    var y = d3.scale.linear()
+            .range([bbox.height - 10, 10])
+            .domain([0.0, 1.0]);
+
+    // global JSON data variables
+    var data = [];
+    var circles = [];
+
+    // get JSON data
+    var addData = function () {
+        $.post('../create_data/', {'n': 10}, function( newdata ) {
+            data.push.apply(data, newdata);
+            refreshGraph();
+        });
+    };
+
+    var removeData = function () {
+        data.splice(0, 1);
+        refreshGraph();
+    };
+
+    var refreshGraph = function () {
+        circles = container.selectAll("circle")
+                .data(data, function ( d ) {
+                    return new Date(d[0]); });
+
+        circles.enter()
+                .append("circle")
+                .attr("cx", function( d ) { return x(d[1]);})
+                .attr("cy", function( d ) { return y(d[2]);})
+                .attr("r", 5)
+                .attr("id", function (d, i) {return i;});
+
+        circles.exit()
+                .remove()
+
+//        console.log(data);
+
+//        d3.select("#footer_bar").selectAll("p")
+//                .data(data, function( d ) { if (d) {return d[0]} else {return 0}; })
+//                .enter()
+//                .append("p")
+//                .text(function ( d, i ) { return String(i); })
+    };
+
+    addButton.on("click", addData);
+    removeButton.on("click", removeData);
+    addData();
+</script>
+
+</body>
+</html>
